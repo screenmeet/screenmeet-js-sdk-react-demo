@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import {ScreenMeet} from "@screenmeet/js-sdk";
 import SupportSession from "./components/SupportSession";
+import CRMCase from "./components/CRMCase";
+import _ from 'lodash';
 import './App.css';
 
 class App extends Component {
@@ -12,10 +14,27 @@ class App extends Component {
     newType: 'support',
     newFormVisible: false,
     working: false,
-    allSessions : [] //used to track/render all user sessions
+    allSessions : [], //used to track/render all user sessions
+    crmObjects: []
   }
   
   ScreenMeetMain;
+  
+  createCrmObject = () => {
+    let newObj = {
+      'type' : 'case',
+      'id' : this.uuidv4(),
+      'name' : 'Case ' + (Math.round(Math.random() * 900000)+100000).toString()
+    }
+    
+    let objects = [...this.state.crmObjects, newObj];
+    this.updateCrmObject(objects);
+  }
+  
+  updateCrmObject = (o) => {
+    this.setState({'crmObjects': o});
+    localStorage.setItem('sm_demo_crm_bojects', JSON.stringify(o));
+  }
   
   componentDidMount() {
     let sm_global_opts = {
@@ -35,6 +54,15 @@ class App extends Component {
     }
     //if we aren't authenticated, but might become later
     this.ScreenMeetMain.on("authenticated", this.onAuthenticated);
+    
+    //restore crm objects from localStorage
+    let crmObjects = localStorage.getItem('sm_demo_crm_bojects');
+    if (crmObjects) {
+      try{
+        let objects = JSON.parse(crmObjects);
+        this.setState({'crmObjects': objects});
+      } catch (e) {}
+    }
   }
   
   onAuthenticated = (userInfo) => {
@@ -51,6 +79,19 @@ class App extends Component {
     this.setState({'working':true})
     try {
       let result = await this.ScreenMeetMain.createAdhocSession(this.state.newType, this.state.newName);
+      console.log(`Session created`, result);
+      this.ScreenMeetMain.listUserSessions(); //refreshes the list of sessions
+    } catch (er) {
+      console.error(er);
+    }
+    
+    this.setState({'working':false, 'newFormVisible' : false})
+  }
+  
+  createRelatedSession = async (instance, object) => {
+    this.setState({'working':true})
+    try {
+      let result = await instance.create(this.state.newType, this.state.newName);
       console.log(`Session created`, result);
       this.ScreenMeetMain.listUserSessions(); //refreshes the list of sessions
     } catch (er) {
@@ -130,6 +171,17 @@ class App extends Component {
     </div>
   }
   
+  uuidv4 = () => {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+  }
+  
+  closeCase = (crmcase) => {
+    let filtered = _.filter(this.state.crmObjects, (o) => {return o.id != crmcase.id});
+    this.updateCrmObject(filtered);
+  }
+  
   render() {
     const {userInfo} = this.state;
     return (
@@ -150,7 +202,7 @@ class App extends Component {
             All My Sessions <button onClick={() => { this.showCreateForm('adhoc'); } }>+ New</button>
           </th>
           <th  width="50%">
-            CRM Objects Demo
+            CRM Objects Demo <button onClick={this.createCrmObject}>+ Create Case</button>
           </th>
           </tr>
           </thead>
@@ -161,7 +213,11 @@ class App extends Component {
                 return <SupportSession key={'adhoc.'+s.id} session={s} onClose={this.ScreenMeetMain.listUserSessions} instance={this.ScreenMeetMain}/>
               })}
             </td>
-            <td></td>
+            <td>
+              {this.state.crmObjects.map((c) => {
+                return <CRMCase key={'case.'+c.id} obj={c} onClose={this.closeCase} instance={this.ScreenMeetMain}/>
+              })}
+            </td>
           </tr>
           </tbody>
         </table>}

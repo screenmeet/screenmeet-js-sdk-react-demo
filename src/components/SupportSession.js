@@ -1,6 +1,8 @@
 import {Component} from "react";
 
-
+/**
+ * Demo screenmeet case object render
+ */
 export default class SupportSession extends Component {
   
   closeSession =async () => {
@@ -21,7 +23,7 @@ export default class SupportSession extends Component {
     
     return <div className={`session session-${session.status}`}>
       <div className='label'>
-        [{session.type}] {session.label} <button onClick={this.closeSession}>X</button>
+        [{session.type}] {session.label} <button className='closebutton' onClick={this.closeSession}>X</button>
       </div>
       <div>
         pin: {session.pin}<br/>

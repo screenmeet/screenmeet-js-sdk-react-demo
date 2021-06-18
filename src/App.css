@@ -71,6 +71,56 @@ th {
     border-color: orange;
 }
 
+button {
+    border: 0px;
+    background-color: #2fa82f;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 3px 10px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0e800e;
+}
+
 .session-active button {
     background-color: orange;
+}
+
+.case {
+    background-color: #deeefa;
+    margin: 3px;
+    border-radius: 5px;
+    border: #4f8ed0 2px solid;
+    padding: 3px;
+    font-size: 12px;
+}
+
+
+
+.closebutton {
+    float: right;
+    cursor: pointer;
+    border-radius: 13px;
+    width: 25px;
+    height: 25px;
+    padding: 0px;
+    border: 0px;
+    background-color: #f66a6a;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.closebutton:hover {
+    background-color: #c70a0a;
+}
+
+.case-related-sessions {
+    padding-left: 30px;
+}
+
+table td {
+    vertical-align: top;
 }
