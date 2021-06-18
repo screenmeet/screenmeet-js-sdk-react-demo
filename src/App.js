@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import {ScreenMeet} from "@screenmeet/js-sdk";
+import SupportSession from "./components/SupportSession";
 import './App.css';
 
 class App extends Component {
@@ -18,27 +19,27 @@ class App extends Component {
   
   componentDidMount() {
     let sm_global_opts = {
-      "mode" : "adhoc",
-      "persistAuth" : true,
-      "trackSessionState" : true, //will poll for session states for all widgets
-      "cbdeployments" : true,
-      "eventHandlers":{
-        authenticated: (userInfo) => {
-          this.setState({'userInfo' : userInfo});
-        },
-        signout: () => { this.setState({'userInfo' : null})  },
-        // destroyed: () => { document.getElementById('adhocsessions').innerHTML = ''; },
-        updated: (sessions) => { this.setState({'allSessions' : Object.values(sessions) }) }
-      }};
-  
-    
+      "mode": "adhoc",
+      "persistAuth": true,
+      "trackSessionState": true, //will poll for session states for all widgets
+      "cbdeployments": true,
+    };
     //Creates a screenmeet instance which is not bound to any object, can be used to create adhoc sessions
     this.ScreenMeetMain = new ScreenMeet(sm_global_opts);
+    this.ScreenMeetMain.on("signout", () => { this.setState({'userInfo' : null})  });
+    this.ScreenMeetMain.on("updated", (sessions) => { this.setState({'allSessions' : Object.values(sessions) });} );
     
+    //if we already are authenticated, render the info and fetch sessions
     if (this.ScreenMeetMain.isAuthenticated()) {
-      this.ScreenMeetMain.listUserSessions();
+      this.onAuthenticated(this.ScreenMeetMain.global.me);
     }
-    
+    //if we aren't authenticated, but might become later
+    this.ScreenMeetMain.on("authenticated", this.onAuthenticated);
+  }
+  
+  onAuthenticated = (userInfo) => {
+    this.setState({'userInfo' : userInfo});
+    this.ScreenMeetMain.listUserSessions();
   }
   
   componentWillUnmount() {
@@ -51,6 +52,7 @@ class App extends Component {
     try {
       let result = await this.ScreenMeetMain.createAdhocSession(this.state.newType, this.state.newName);
       console.log(`Session created`, result);
+      this.ScreenMeetMain.listUserSessions(); //refreshes the list of sessions
     } catch (er) {
       console.error(er);
     }
@@ -120,8 +122,8 @@ class App extends Component {
         </div>
         
         <div className='actionRow'>
-          <button disabled={this.state.working} onClick={this.closeCreateForm}>Cancel</button>
           <button disabled={this.state.working} onClick={this.createAdhocSession}>Create</button>
+          <button disabled={this.state.working} onClick={this.closeCreateForm}>Cancel</button>
         </div>
       </div>
       
@@ -141,7 +143,7 @@ class App extends Component {
           </div>}
         </header>
         
-        <table style={{'width' : '100%'}}>
+        {userInfo && <table style={{'width' : '100%'}}>
           <thead>
           <tr>
           <th width="50%">
@@ -156,13 +158,13 @@ class App extends Component {
           <tr>
             <td>
               {this.state.allSessions.map((s) => {
-                return <div>{s.label}</div>
+                return <SupportSession key={'adhoc.'+s.id} session={s} onClose={this.ScreenMeetMain.listUserSessions} instance={this.ScreenMeetMain}/>
               })}
             </td>
             <td></td>
           </tr>
           </tbody>
-        </table>
+        </table>}
         
         {this.state.newFormVisible && this.renderNewSessionForm()}
       </div>

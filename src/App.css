@@ -57,3 +57,20 @@ th {
 .createform .actionRow button {
     margin-right: 20px;
 }
+
+.session {
+    background-color: #eeeeee;
+    margin: 3px;
+    border-radius: 5px;
+    border: #aaaaaa 2px solid;
+    padding: 3px;
+    font-size: 12px;
+}
+
+.session-active {
+    border-color: orange;
+}
+
+.session-active button {
+    background-color: orange;
+}
