@@ -87,21 +87,8 @@ class App extends Component {
     
     this.setState({'working':false, 'newFormVisible' : false})
   }
-  
-  createRelatedSession = async (instance, object) => {
-    this.setState({'working':true})
-    try {
-      let result = await instance.create(this.state.newType, this.state.newName);
-      console.log(`Session created`, result);
-      this.ScreenMeetMain.listUserSessions(); //refreshes the list of sessions
-    } catch (er) {
-      console.error(er);
-    }
-    
-    this.setState({'working':false, 'newFormVisible' : false})
-  }
-  
-  showCreateForm = (sessionKind) => {
+
+  showCreateForm = () => {
     this.setState({'newFormVisible':true});
   }
   
@@ -199,7 +186,7 @@ class App extends Component {
           <thead>
           <tr>
           <th width="50%">
-            All My Sessions <button onClick={() => { this.showCreateForm('adhoc'); } }>+ New</button>
+            All My Sessions <button onClick={() => { this.showCreateForm(); } }>+ New</button>
           </th>
           <th  width="50%">
             CRM Objects Demo <button onClick={this.createCrmObject}>+ Create Case</button>
@@ -215,7 +202,7 @@ class App extends Component {
             </td>
             <td>
               {this.state.crmObjects.map((c) => {
-                return <CRMCase key={'case.'+c.id} obj={c} onClose={this.closeCase} instance={this.ScreenMeetMain}/>
+                return <CRMCase key={'case.'+c.id} obj={c} onClose={this.closeCase} instance={this.ScreenMeetMain} onRefresh={this.ScreenMeetMain.listUserSessions}/>
               })}
             </td>
           </tr>
