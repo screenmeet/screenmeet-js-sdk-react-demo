@@ -15,7 +15,9 @@ class App extends Component {
     newFormVisible: false,
     working: false,
     allSessions : [], //used to track/render all user sessions
-    crmObjects: []
+    crmObjects: [],
+    prefOptions: [],
+    selectedOpts : {}
   }
   
   ScreenMeetMain;
@@ -78,7 +80,8 @@ class App extends Component {
   createAdhocSession = async () => {
     this.setState({'working':true})
     try {
-      let result = await this.ScreenMeetMain.createAdhocSession(this.state.newType, this.state.newName);
+      let prefs = this.state.selectedOpts;
+      let result = await this.ScreenMeetMain.createAdhocSession(this.state.newType, this.state.newName, prefs);
       console.log(`Session created`, result);
       this.ScreenMeetMain.listUserSessions(); //refreshes the list of sessions
     } catch (er) {
@@ -89,7 +92,8 @@ class App extends Component {
   }
 
   showCreateForm = () => {
-    this.setState({'newFormVisible':true});
+    let prefOpts = this.ScreenMeetMain.getSessionPrefOptions(this.state.newType);
+    this.setState({'newFormVisible':true, prefOptions: prefOpts});
   }
   
   closeCreateForm = () => {
@@ -126,7 +130,15 @@ class App extends Component {
   }
   
   handleTypeChange = (event) => {
-    this.setState({'newType' : event.target.value})
+    let prefOpts = this.ScreenMeetMain.getSessionPrefOptions(event.target.value);
+    this.setState({'newType' : event.target.value, prefOptions: prefOpts});
+    
+  }
+  
+  handleOptionChange = (event) => {
+    let selectedOpts = this.state.selectedOpts;
+    selectedOpts[event.target.name] = event.target.checked;
+    this.setState({'selectedOpts' : selectedOpts});
   }
   
   renderNewSessionForm = () => {
@@ -147,6 +159,18 @@ class App extends Component {
             <option value='live'>Live</option>
             <option value='replay'>Replay</option>
           </select>
+          
+          {this.state.prefOptions.map((opt) => {
+            return <div key={`pref${opt.name}`}>
+              <label>
+              <input onChange={this.handleOptionChange}
+                name={opt.name}
+                type='checkbox' checked={this.state.selectedOpts[opt.name]} />
+                {opt.label}
+              </label>
+            </div>
+          })}
+          
         </div>
         
         <div className='actionRow'>

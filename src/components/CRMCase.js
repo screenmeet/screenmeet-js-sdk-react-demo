@@ -13,6 +13,8 @@ export default class CRMCase extends Component {
     newType: 'support',
     working: false,
     allSessions : [], //used to track/render all user sessions
+    prefOptions: [],
+    selectedOpts : {}
   }
   
   
@@ -58,7 +60,8 @@ export default class CRMCase extends Component {
   }
   
   showCreateForm = () => {
-    this.setState({'newFormVisible':true, 'newName' : this.props.obj.name});
+    let prefOpts = this.ScreenMeetMain.getSessionPrefOptions(this.state.newType);
+    this.setState({'newFormVisible':true, 'newName' : this.props.obj.name, prefOptions: prefOpts});
   }
   
   closeCreateForm = () => {
@@ -80,7 +83,7 @@ export default class CRMCase extends Component {
     let objectKey = this.getObjectKey();
     
     //prefs would go here (not implemented)
-    let prefs = {};
+    let prefs = this.state.selectedOpts;
     
     
     try {
@@ -94,12 +97,15 @@ export default class CRMCase extends Component {
     this.setState({'working':false, 'newFormVisible' : false})
   }
   
-  handleNameChange = (event) => {
-    this.setState({'newName' : event.target.value})
+  handleTypeChange = (event) => {
+    let prefOpts = this.ScreenMeetMain.getSessionPrefOptions(event.target.value);
+    this.setState({'newType' : event.target.value, prefOptions: prefOpts});
   }
   
-  handleTypeChange = (event) => {
-    this.setState({'newType' : event.target.value})
+  handleOptionChange = (event) => {
+    let selectedOpts = this.state.selectedOpts;
+    selectedOpts[event.target.name] = event.target.checked;
+    this.setState({'selectedOpts' : selectedOpts});
   }
   
   renderNewSessionForm = () => {
@@ -120,6 +126,18 @@ export default class CRMCase extends Component {
             <option value='live'>Live</option>
             <option value='replay'>Replay</option>
           </select>
+  
+          {this.state.prefOptions.map((opt) => {
+            return <div key={`pref${opt.name}`} >
+              <label>
+                <input onChange={this.handleOptionChange}
+                       name={opt.name}
+                       type='checkbox' checked={this.state.selectedOpts[opt.name]} />
+                {opt.label}
+              </label>
+            </div>
+          })}
+          
         </div>
         
         <div className='actionRow'>
