@@ -1465,11 +1465,12 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@screenmeet/js-sdk@^1.0.2":
-  version "1.0.4"
-  resolved "https://nexus.screenmeet.com/repository/npm/@screenmeet/js-sdk/-/js-sdk-1.0.4.tgz#877c3273e31f240ab7bff52a20eb0475b6259691"
-  integrity sha512-FJ+gZ9Di6M8FV+ll6NFsOdn46aIu9FeNSpy1SiW3oi9K4wQTclSyUNjTnbNQjwonTVU28rTe6sI1V8mHoJwAZg==
+"@screenmeet/js-sdk@1.0.8":
+  version "1.0.8"
+  resolved "https://nexus.screenmeet.com/repository/npm/@screenmeet/js-sdk/-/js-sdk-1.0.8.tgz#ce226757cbef861c09ac32ee9eaacef2c3c1553a"
+  integrity sha512-0O/diKTn766c9aiqW3J9Od8yFQxbhst+SinP4DUh4svNVa5uK/hoegUnM0hbXMdfQecHz0hqBV/8tcRQy2NaJQ==
   dependencies:
+    "@types/debug" "^4.1.5"
     debug "^4.3.1"
     lodash.keyby "^4.6.0"
     node-fetch "^2.6.1"
@@ -1686,6 +1687,11 @@
   integrity sha512-kSjgDMZONiIfSH1Nxcr5JIRMwUetDki63FSQfpTCz8ogF3Ulqm8+mr5f78dUYs6vMiB6gBusQqfQmBvHZj/lwg==
   dependencies:
     "@babel/types" "^7.3.0"
+
+"@types/debug@^4.1.5":
+  version "4.1.6"
+  resolved "https://nexus.screenmeet.com/repository/npm/@types/debug/-/debug-4.1.6.tgz#0b7018723084918a865eff99249c490505df2163"
+  integrity sha512-7fDOJFA/x8B+sO1901BmHlf5dE1cxBU8mRXj8QOEDnn16hhGJv/IHxJtZhvsabZsIMn0eLIyeOKAeqSNJJYTpA==
 
 "@types/eslint@^7.2.6":
   version "7.2.6"
@@ -3878,10 +3884,17 @@ debug@^3.1.1, debug@^3.2.6:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1:
+debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
   integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
+  dependencies:
+    ms "2.1.2"
+
+debug@^4.3.1:
+  version "4.3.2"
+  resolved "https://nexus.screenmeet.com/repository/npm/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
+  integrity sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==
   dependencies:
     ms "2.1.2"
 
@@ -6925,14 +6938,9 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-"lodash@>=3.5 <5", lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.5:
+"lodash@>=3.5 <5", lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
-
-lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://nexus.screenmeet.com/repository/npm/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loglevel@^1.6.8:

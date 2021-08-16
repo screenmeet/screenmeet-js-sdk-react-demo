@@ -75,6 +75,7 @@ export default class CRMCase extends Component {
     let parentObject =  {
       'id' : this.props.obj.id,
       'app ' : 'reactdemoapp',
+      'provider' : 'sdk-demo',
       'type' : 'case', //object type
       'name' : this.state.newName, //name of object - goes into label field
       'sync' : false

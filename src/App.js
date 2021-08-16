@@ -38,12 +38,14 @@ class App extends Component {
     localStorage.setItem('sm_demo_crm_bojects', JSON.stringify(o));
   }
   
+  
   componentDidMount() {
     let sm_global_opts = {
       "mode": "adhoc",
       "persistAuth": true,
       "trackSessionState": true, //will poll for session states for all widgets
       "cbdeployments": true,
+      "api_endpoint" : "https://ea-home-dev.screenmeet.com:3002/v3"
     };
     //Creates a screenmeet instance which is not bound to any object, can be used to create adhoc sessions
     this.ScreenMeetMain = new ScreenMeet(sm_global_opts);
@@ -68,6 +70,7 @@ class App extends Component {
   }
   
   onAuthenticated = (userInfo) => {
+    console.log('authenticated as ', userInfo);
     this.setState({'userInfo' : userInfo});
     this.ScreenMeetMain.listUserSessions();
   }
@@ -102,8 +105,8 @@ class App extends Component {
   
   signIn = async () => {
     let cburl = document.location.origin + '/oauth_cb.html';
-    let provider = 'sfdc';
-    let instance = 'https://login.salesforce.com/'
+    let provider = 'snow-universal';
+    let instance = 'https://ven02275.service-now.com'
   
   
     try {
